@@ -26,6 +26,7 @@ public enum AXNotification: String {
 
     // Element notifications
     case uiElementDestroyed      = "AXUIElementDestroyed"
+    case busyChanged             = "AXElementBusyChanged"
     case valueChanged            = "AXValueChanged"
     case titleChanged            = "AXTitleChanged"
     case resized                 = "AXResized"
