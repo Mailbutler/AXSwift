@@ -64,6 +64,9 @@ public enum AXNotification: String {
     // help an assistive application determine the importance of this announcement.  This
     // notification should be posted for the application element.
     case announcementRequested   = "AXAnnouncementRequested"
+
+    // Private WebKit notifications
+    case layoutComplete          = "AXLayoutComplete"
 }
 
 /// All UIElement roles.
