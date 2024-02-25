@@ -74,7 +74,7 @@ public final class Observer {
         CFRunLoopAddSource(
             RunLoop.current.getCFRunLoop(),
             AXObserverGetRunLoopSource(axObserver),
-            CFRunLoopMode.defaultMode)
+            CFRunLoopMode.commonModes)
     }
 
     /// Stops sending events to your callback until the next call to `start`.
@@ -87,7 +87,7 @@ public final class Observer {
         CFRunLoopRemoveSource(
             RunLoop.current.getCFRunLoop(),
             AXObserverGetRunLoopSource(axObserver),
-            CFRunLoopMode.defaultMode)
+            CFRunLoopMode.commonModes)
     }
 
     /// Adds a notification for the observer to watch.
