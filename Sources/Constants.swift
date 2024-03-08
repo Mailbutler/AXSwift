@@ -65,8 +65,21 @@ public enum AXNotification: String {
     // notification should be posted for the application element.
     case announcementRequested   = "AXAnnouncementRequested"
 
-    // Private WebKit notifications
+    // Undocument WebKit notifications
     case layoutComplete          = "AXLayoutComplete"
+
+    // Undocumented Dock notifications
+    case exposeShowAllWindows    = "AXExposeShowAllWindows"
+    case exposeShowFrontWindows  = "AXExposeShowFrontWindows"
+    case exposeShowDesktop       = "AXExposeShowDesktop"
+    case exposeExit              = "AXExposeExit"
+    case launchpadShown          = "AXLaunchpadShown"
+    case launchpadHidden         = "AXLaunchpadHidden"
+
+    // Other undocumented notifications
+    case draggingDestinationDropAllowed     = "AXDraggingDestinationDropAllowed"
+    case draggingDestinationDropNotAllowed  = "AXDraggingDestinationDropNotAllowed"
+    case draggingDestinationDragAccepted    = "AXDraggingDestinationDragAccepted"
 }
 
 /// All UIElement roles.
