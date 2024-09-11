@@ -397,6 +397,10 @@ public enum Attribute: String {
     case markerType                             = "AXMarkerType" //(NSString *) - see ruler marker type values below
     case markerTypeDescription                  = "AXMarkerTypeDescription" //(NSString *)
 
+    // Menu item attributes
+    case menuItemCmdChar                        = "AXMenuItemCmdChar" //(NSString *)
+    case menuItemCmdModifiers                   = "AXMenuItemCmdModifiers" //(NSNumber *)
+
     // UI element identification attributes
     case identifier                             = "AXIdentifier" //(NSString *)
 
