@@ -65,7 +65,7 @@ public enum AXNotification: String {
     // notification should be posted for the application element.
     case announcementRequested   = "AXAnnouncementRequested"
 
-    // Undocument WebKit notifications
+    // Undocumented WebKit notifications
     case layoutComplete          = "AXLayoutComplete"
 
     // Undocumented Dock notifications
@@ -140,6 +140,9 @@ public enum Role: String {
     case layoutArea         = "AXLayoutArea"
     case layoutItem         = "AXLayoutItem"
     case handle             = "AXHandle"
+
+    // WebKit roles
+    case webArea            = "AXWebArea"
 }
 
 /// All UIElement subroles.
