@@ -6,7 +6,7 @@ public var systemWideElement = SystemWideElement()
 
 /// A `UIElement` for the system-wide accessibility element, which can be used to retrieve global,
 /// application-inspecific parameters like the currently focused element.
-open class SystemWideElement: UIElement {
+open class SystemWideElement: UIElement, @unchecked Sendable {
     fileprivate convenience init() {
         self.init(AXUIElementCreateSystemWide())
     }

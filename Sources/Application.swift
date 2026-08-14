@@ -1,7 +1,7 @@
 import Cocoa
 
 /// A `UIElement` for an application.
-public final class Application: UIElement {
+public final class Application: UIElement, @unchecked Sendable {
     // Creates a UIElement for the given process ID.
     // Does NOT check if the given process actually exists, just checks for a valid ID.
     convenience init?(forKnownProcessID processID: pid_t) {

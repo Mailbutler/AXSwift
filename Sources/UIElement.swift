@@ -1,5 +1,6 @@
 import Cocoa
 import Foundation
+import os
 
 /// Holds and interacts with any accessibility element.
 ///
@@ -563,10 +564,13 @@ open class UIElement {
     /// - note: Only applies to this instance of UIElement, not other instances that happen to equal
     ///         it.
     /// - seeAlso: `UIElement.globalMessagingTimeout(_:)`
-    open var messagingTimeout: Float = 0 {
-        didSet {
-            messagingTimeout = max(messagingTimeout, 0)
-            let error = AXUIElementSetMessagingTimeout(element, messagingTimeout)
+    open var messagingTimeout: Float {
+        get { messagingTimeoutLock.withLock { $0 } }
+        set {
+            let clamped = max(newValue, 0)
+            messagingTimeoutLock.withLock { $0 = clamped }
+
+            let error = AXUIElementSetMessagingTimeout(element, clamped)
 
             // InvalidUIElement errors are only relevant when actually passing messages, so we can
             // ignore them here.
@@ -575,6 +579,10 @@ open class UIElement {
             }
         }
     }
+
+    /// There is no AX call to read a messaging timeout back, so it has to be cached. Callers
+    /// save/restore it around a call, and may do so from different threads, hence the lock.
+    private let messagingTimeoutLock = OSAllocatedUnfairLock<Float>(initialState: 0)
 
     // Gets the element at the specified coordinates.
     // This can only be called on applications and the system-wide element, so it is internal here.
@@ -641,6 +649,13 @@ extension UIElement: CustomStringConvertible {
         return "\(attributes)"
     }
 }
+
+// MARK: - Sendable
+
+/// `@unchecked` because a checked conformance is unreachable from here: the class is not `final`,
+/// and `AXUIElement` is itself non-`Sendable`. The claim holds because the AX API is thread-safe and
+/// the only mutable state is `messagingTimeout`, locked above — a subclass adding state would break it.
+extension UIElement: @unchecked Sendable {}
 
 // MARK: - Equatable
 
