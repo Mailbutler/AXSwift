@@ -418,12 +418,32 @@ open class UIElement {
 
     // MARK: Attribute helpers
 
+    /// Wraps an element that was read out of this one, handing down `messagingTimeout`.
+    ///
+    /// `AXUIElementSetMessagingTimeout` applies to the single `AXUIElementRef` it is given — not to
+    /// the target application, and not even to another ref that is `CFEqual` to it. Handing the
+    /// timeout down is therefore the only way to raise it for a whole subtree rather than for the
+    /// entire process via `globalMessagingTimeout`.
+    ///
+    /// - note: A descendant keeps the timeout it inherited. Lowering the parent's again afterwards
+    ///         does not reach the descendants already read out of it.
+    func wrapDescendant(_ nativeElement: AXUIElement) -> UIElement {
+        let descendant = UIElement(nativeElement)
+        let inheritedTimeout = messagingTimeout
+
+        if inheritedTimeout > 0 {
+            descendant.messagingTimeout = inheritedTimeout
+        }
+
+        return descendant
+    }
+
     // Checks if the value is an AXValue and if so, unwraps it.
     // If the value is an AXUIElement, wraps it in UIElement.
     fileprivate func unpackAXValue(_ value: AnyObject) -> Any {
         switch CFGetTypeID(value) {
         case AXUIElementGetTypeID():
-            return UIElement(value as! AXUIElement)
+            return wrapDescendant(value as! AXUIElement)
         case AXValueGetTypeID():
             let type = AXValueGetType(value as! AXValue)
             switch type {
@@ -562,7 +582,7 @@ open class UIElement {
     /// method call can delay execution. The default is `0`, which means to use the global timeout.
     ///
     /// - note: Only applies to this instance of UIElement, not other instances that happen to equal
-    ///         it.
+    ///         it. Elements read out of this one do inherit it — see `wrapDescendant(_:)`.
     /// - seeAlso: `UIElement.globalMessagingTimeout(_:)`
     open var messagingTimeout: Float {
         get { messagingTimeoutLock.withLock { $0 } }
@@ -598,7 +618,7 @@ open class UIElement {
             throw error
         }
 
-        return UIElement(result!)
+        return wrapDescendant(result!)
     }
 
     // TODO: convenience functions for attributes

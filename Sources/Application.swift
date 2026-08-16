@@ -77,7 +77,7 @@ public final class Application: UIElement, @unchecked Sendable {
     ///            cannot be retrieved.
     public func windows() throws -> [UIElement]? {
         let axWindows: [AXUIElement]? = try attribute("AXWindows")
-        return axWindows?.map({ UIElement($0) })
+        return axWindows?.map({ wrapDescendant($0) })
     }
 
     /// Returns the element at the specified top-down coordinates, or nil if there is none.
