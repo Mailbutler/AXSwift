@@ -684,6 +684,18 @@ public func ==(lhs: UIElement, rhs: UIElement) -> Bool {
     return CFEqual(lhs.element, rhs.element)
 }
 
+// MARK: - Hashable
+
+extension UIElement: Hashable {
+    /// `CFHash` is the counterpart of the `CFEqual` behind `==`. Hashing anything derived from the
+    /// wrapper's own identity makes a `Set`, `Dictionary` or `NSHashTable` lookup miss an element
+    /// that `==` reports as present, because an observer callback hands back a new `UIElement` for
+    /// an `AXUIElement` the caller already holds.
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(CFHash(element))
+    }
+}
+
 // MARK: - Convenience getters
 
 extension UIElement {
