@@ -673,8 +673,14 @@ extension UIElement: CustomStringConvertible {
 // MARK: - Sendable
 
 /// `@unchecked` because a checked conformance is unreachable from here: the class is not `final`,
-/// and `AXUIElement` is itself non-`Sendable`. The claim holds because the AX API is thread-safe and
-/// the only mutable state is `messagingTimeout`, locked above — a subclass adding state would break it.
+/// and `AXUIElement` is itself non-`Sendable`. The claim covers the wrapper's own state: the element
+/// reference never changes and the only mutable state is `messagingTimeout`, locked above — a
+/// subclass adding state would break it.
+///
+/// It does not make Accessibility calls safe from any thread. The consumer-side AX API "fail[s] a lot
+/// in terms of memory safety in concurrent environments" even where thread-safety would be reasonable
+/// to expect (https://github.com/Choominator/Vosh), so callers confine their calls to known threads -
+/// handing an element to another thread is fine, calling AX on it from an arbitrary one is not.
 extension UIElement: @unchecked Sendable {}
 
 // MARK: - Equatable
