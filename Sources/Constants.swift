@@ -24,6 +24,11 @@ public enum AXNotification: String {
     case drawerCreated           = "AXDrawerCreated"
     case sheetCreated            = "AXSheetCreated"
 
+    // Menu notifications
+    case menuOpened              = "AXMenuOpened"
+    case menuClosed              = "AXMenuClosed"
+    case menuItemSelected        = "AXMenuItemSelected"
+
     // Element notifications
     case uiElementDestroyed      = "AXUIElementDestroyed"
     case busyChanged             = "AXElementBusyChanged"
